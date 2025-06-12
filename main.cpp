@@ -150,7 +150,7 @@ int main(int argc, char *argv[]) {
 
 
         QPushButton *saveButton = new QPushButton("💾 Save Image");
-        saveButton->setEnabled(false); // disabled until generation is done
+      //  saveButton->setEnabled(false); // disabled until generation is done
         layout->addWidget(saveButton);
 
         QObject::connect(saveButton, &QPushButton::clicked, [=]() {
