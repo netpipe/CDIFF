@@ -16,7 +16,7 @@
 #include <QNetworkRequest>
 #include <QFile>
 #include <QDir>
-
+#include <QProgressBar>
 QString outputImagePath = "output.png";
 
 int main(int argc, char *argv[]) {
@@ -84,6 +84,10 @@ int main(int argc, char *argv[]) {
     QPushButton *downloadModelBtn = new QPushButton("Download Model (q4_0)");
     layout->addWidget(downloadModelBtn);
 
+    QProgressBar *progressBar = new QProgressBar;
+    progressBar->setRange(0, 100);
+    progressBar->setValue(0);
+    layout->addWidget(progressBar);
       //  imageLabel->setText("⚠️ Model not found. Please download it.");
         QNetworkAccessManager *manager = new QNetworkAccessManager(&window);
         QObject::connect(downloadModelBtn, &QPushButton::clicked, [&]() {
@@ -203,6 +207,27 @@ int main(int argc, char *argv[]) {
 //            imageLabel->setText("⚠️ Error: " + err);
 //        });
       //  qDebug() << "Running: ./sd" << args;
+
+        QObject::connect(process, &QProcess::readyReadStandardOutput, [=]() {
+            QString output = process->readAllStandardOutput();
+            QTextStream stream(&output);
+            while (!stream.atEnd()) {
+                QString line = stream.readLine();
+                qDebug() << "stdout:" << line;
+
+                // Parse progress: "|===>...| 1/3"
+                QRegularExpression progRegex(R"(\|\s*(\d+)/(\d+))");
+                QRegularExpressionMatch match = progRegex.match(line);
+                if (match.hasMatch()) {
+                    int step = match.captured(1).toInt();
+                    int total = match.captured(2).toInt();
+                    if (total > 0) {
+                        int percent = (step * 100) / total;
+                        progressBar->setValue(percent);
+                    }
+                }
+            }
+        });
 
 
         QObject::connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
