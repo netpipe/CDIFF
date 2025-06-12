@@ -18,6 +18,13 @@
 #include <QDir>
 #include <QProgressBar>
 #include <QFileDialog>
+#include <QRandomGenerator>
+
+int randInt(int low, int high)
+{
+    // Random number between low and high
+    return qrand() % ((high + 1) - low) + low;
+}
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
@@ -56,10 +63,16 @@ int main(int argc, char *argv[]) {
     stepsSpin->setRange(1, 150);
     stepsSpin->setValue(20);
 
+    QTime time = QTime::currentTime();
+    qsrand((uint)time.msec());
+    //qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
+
+    // Get random value between 0-100
+   // int randomValue = randInt(0,100);
     // Seed
     QSpinBox *seedSpin = new QSpinBox;
     seedSpin->setRange(-1, 100000);
-    seedSpin->setValue(qrand());
+    seedSpin->setValue(randInt(0,100000));
 
     // Threads
     QSpinBox *threadsSpin = new QSpinBox;
