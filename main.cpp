@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     // Seed
     QSpinBox *seedSpin = new QSpinBox;
     seedSpin->setRange(-1, 100000);
-    seedSpin->setValue(qrand()%1000);
+    seedSpin->setValue(qrand());
 
     // Threads
     QSpinBox *threadsSpin = new QSpinBox;
