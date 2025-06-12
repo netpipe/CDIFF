@@ -169,7 +169,7 @@ int main(int argc, char *argv[]) {
             QString defaultPath = QDir::homePath() + "/image.png";
             QString fileName = QFileDialog::getSaveFileName(nullptr, "Save Image", defaultPath, "PNG Image (*.png)");
             if (!fileName.isEmpty()) {
-                QFile::copy("output.png", fileName); // or your actual output file path
+                QFile::copy(QApplication::applicationDirPath() + "/output.png", fileName); // or your actual output file path
             }
         });
 
