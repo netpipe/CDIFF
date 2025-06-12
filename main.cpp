@@ -243,27 +243,6 @@ int main(int argc, char *argv[]) {
             }
         });
 
-        QObject::connect(process, &QProcess::readyReadStandardOutput, [=]() {
-            QString output = process->readAllStandardOutput();
-            QTextStream stream(&output);
-            while (!stream.atEnd()) {
-                QString line = stream.readLine();
-                qDebug() << "stdout:" << line;
-
-                // Parse progress: "|===>...| 1/3"
-                QRegularExpression progRegex(R"(\|\s*(\d+)/(\d+))");
-                QRegularExpressionMatch match = progRegex.match(line);
-                if (match.hasMatch()) {
-                    int step = match.captured(1).toInt();
-                    int total = match.captured(2).toInt();
-                    if (total > 0) {
-                        int percent = (step * 100) / total;
-                        progressBar->setValue(percent);
-                    }
-                }
-            }
-        });
-
         QObject::connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
                          [=](int exitCode, QProcess::ExitStatus status) {
             if (exitCode == 0 && QFileInfo::exists(outputImagePath)) {
