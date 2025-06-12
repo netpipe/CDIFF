@@ -17,6 +17,8 @@
 #include <QFile>
 #include <QDir>
 #include <QProgressBar>
+#include <QFileDialog>
+
 QString outputImagePath = "output.png";
 
 int main(int argc, char *argv[]) {
@@ -88,13 +90,14 @@ int main(int argc, char *argv[]) {
     progressBar->setRange(0, 100);
     progressBar->setValue(0);
     layout->addWidget(progressBar);
+
       //  imageLabel->setText("⚠️ Model not found. Please download it.");
         QNetworkAccessManager *manager = new QNetworkAccessManager(&window);
         QObject::connect(downloadModelBtn, &QPushButton::clicked, [&]() {
             if (!QFileInfo::exists("models/stable-diffusion-v1-5-pruned-emaonly-Q4_0.gguf")){
             QString initialUrl = "https://huggingface.co/second-state/stable-diffusion-v1-5-GGUF/resolve/main/stable-diffusion-v1-5-pruned-emaonly-Q4_0.gguf";
             QString outputDir = "models";
-            QString outputFile = outputDir + "/stable-diffusion-v1-5-pruned-emaonly-Q4_0.gguf";
+            QString outputFile = QApplication::applicationDirPath() + outputDir + "/stable-diffusion-v1-5-pruned-emaonly-Q4_0.gguf";
 
             QDir().mkpath(outputDir);
             QNetworkRequest request(initialUrl);
@@ -146,6 +149,18 @@ int main(int argc, char *argv[]) {
         });
 
 
+        QPushButton *saveButton = new QPushButton("💾 Save Image");
+        saveButton->setEnabled(false); // disabled until generation is done
+        layout->addWidget(saveButton);
+
+        QObject::connect(saveButton, &QPushButton::clicked, [=]() {
+            QString defaultPath = QDir::homePath() + "/image.png";
+            QString fileName = QFileDialog::getSaveFileName(nullptr, "Save Image", defaultPath, "PNG Image (*.png)");
+            if (!fileName.isEmpty()) {
+                QFile::copy("output.png", fileName); // or your actual output file path
+            }
+        });
+
 
     QHBoxLayout *sizeLayout = new QHBoxLayout;
     sizeLayout->addWidget(new QLabel("Width:"));
@@ -186,7 +201,7 @@ int main(int argc, char *argv[]) {
         int threads = threadsSpin->value();
 
         QStringList args = {
-            "-m", "models/stable-diffusion-v1-5-pruned-emaonly-Q4_0.gguf",
+            "-m", QApplication::applicationDirPath() + "/models/stable-diffusion-v1-5-pruned-emaonly-Q4_0.gguf",
             "-p", prompt,
             "-n", negPrompt,
             "-o", outputImagePath,
