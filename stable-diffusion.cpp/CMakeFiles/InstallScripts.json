@@ -1,0 +1,15 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/macbook2015/Documents/GitHub/stable-diffusion.cpp/cmake_install.cmake",
+		"/Users/macbook2015/Documents/GitHub/stable-diffusion.cpp/ggml/cmake_install.cmake",
+		"/Users/macbook2015/Documents/GitHub/stable-diffusion.cpp/ggml/src/cmake_install.cmake",
+		"/Users/macbook2015/Documents/GitHub/stable-diffusion.cpp/ggml/src/ggml-cpu/cmake_install.cmake",
+		"/Users/macbook2015/Documents/GitHub/stable-diffusion.cpp/ggml/src/ggml-blas/cmake_install.cmake",
+		"/Users/macbook2015/Documents/GitHub/stable-diffusion.cpp/ggml/src/ggml-metal/cmake_install.cmake",
+		"/Users/macbook2015/Documents/GitHub/stable-diffusion.cpp/thirdparty/cmake_install.cmake",
+		"/Users/macbook2015/Documents/GitHub/stable-diffusion.cpp/examples/cmake_install.cmake",
+		"/Users/macbook2015/Documents/GitHub/stable-diffusion.cpp/examples/cli/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
